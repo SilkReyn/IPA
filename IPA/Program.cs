@@ -66,7 +66,7 @@ namespace IPA
                 var backup = new BackupUnit(context);
 
                 // Copying
-                Console.WriteLine("Updating files... ");
+                Console.WriteLine("Preparing backup... ");
                 var nativePluginFolder = Path.Combine(context.DataPathDst, "Plugins");
                 bool isFlat = Directory.Exists(nativePluginFolder) && Directory.GetFiles(nativePluginFolder).Any(f => f.EndsWith(".dll"));
                 bool force = !BackupManager.HasBackup(context) || context.Args.Contains("-f") || context.Args.Contains("--force");
@@ -77,7 +77,7 @@ namespace IPA
                 CopyAll(new DirectoryInfo(context.DataPathSrc), new DirectoryInfo(context.DataPathDst), force, backup, 
                     (from, to) => NativePluginInterceptor(from, to, new DirectoryInfo(nativePluginFolder), isFlat, architecture) );
 
-                Console.WriteLine("Successfully updated files!");
+                Console.WriteLine("File backup complete");
 
                 if (!Directory.Exists(context.PluginsFolder))
                 {
@@ -89,7 +89,7 @@ namespace IPA
                 var patchedModule = PatchedModule.Load(context.EngineFile);
                 if (!patchedModule.IsPatched)
                 {
-                    Console.Write("Patching UnityEngine.dll... ");
+                    Console.Write($"Patching {Path.GetFileName(context.EngineFile)}... ");
                     backup.Add(context.EngineFile);
                     patchedModule.Patch();
                     Console.WriteLine("Done!");

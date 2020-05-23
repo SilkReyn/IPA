@@ -50,7 +50,8 @@ namespace IPA.Patcher
                 VirtualizeType(type);
             }
 
-            _Module.Write(_File.FullName);
+            //_Module.Write(_File.FullName);
+            _Module.Write($"{Path.GetFileNameWithoutExtension(_File.FullName)}_modified{_File.Extension}");
         }
 
         private void VirtualizeType(TypeDefinition type)

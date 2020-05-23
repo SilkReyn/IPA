@@ -71,7 +71,8 @@ namespace IPA.Patcher
             
             if(patched > 0)
             {
-                _Module.Write(_File.FullName);
+                //_Module.Write(_File.FullName);
+                _Module.Write($"{Path.GetFileNameWithoutExtension(_File.FullName)}_modified{_File.Extension}");
             } else
             {
                 throw new Exception("Could not find any entry type!");
@@ -83,7 +84,8 @@ namespace IPA.Patcher
             var targetMethod = targetType.Methods.FirstOrDefault(m => m.IsConstructor && m.IsStatic);
             if (targetMethod != null)
             {
-                var methodReference = _Module.Import(injector.GetType("IllusionInjector.Injector").Methods.First(m => m.Name == "Inject"));
+                //var methodReference = _Module.Import(injector.GetType("IllusionInjector.Injector").Methods.First(m => m.Name == "Inject"));
+                var methodReference = _Module.ImportReference(injector.GetType("IllusionInjector.Injector").Methods.First(m => m.Name == "Inject"));
                 targetMethod.Body.Instructions.Insert(0, Instruction.Create(OpCodes.Call, methodReference));
                 return true;
             }
